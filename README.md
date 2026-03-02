@@ -28,6 +28,12 @@ Phase 1 focuses strictly on infrastructure deployment, network validation, and b
 
 ---
 
+## Architecture Diagram
+
+![SOC Architecture](diagrams/soc-architecture.png)
+
+---
+
 ## Phase Structure
 
 | Phase | Description | Status |
@@ -64,3 +70,12 @@ Future phases will introduce SIEM integration, log forwarding, detection rules, 
 ---
 
 ## Repository Structure
+
+```text
+SOC-LAB-DOCUMENTATION/
+├── README.md                        # Project overview, architecture summary, and phase tracker
+├── docs/
+│   └── phase-1.md                   # Detailed documentation for Phase 1 infrastructure deployment
+└── diagrams/
+    └── soc-architecture.png         # Visual diagram of the three-node SOC lab topology
+```
