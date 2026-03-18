@@ -150,7 +150,7 @@ Result:
 22/tcp open  ssh  OpenSSH 9.6p1 Ubuntu
 ```
 
-![Nmap scan showing open SSH service](images/phase-2/nmap_scan.png)
+![Nmap scan showing open SSH service](../documentation/images/phase-2/nmap_scan.png)
 
 Caption: Nmap: open SSH port discovery.
 
@@ -188,7 +188,7 @@ Initial result:
 
 - `0 valid password found`
 
-![Hydra output for SSH brute-force attempt](images/phase-2/hydra_attack.png)
+![Hydra output for SSH brute-force attempt](../documentation/images/phase-2/hydra_attack.png)
 
 Caption: Hydra: brute-force attack attempt.
 
@@ -200,7 +200,7 @@ Sample failed log entry observed:
 Failed password for socadmin from 192.168.11.129 port 40196 ssh2
 ```
 
-![SSH failed login attempts shown in journald output](images/phase-2/failed_logs.png)
+![SSH failed login attempts shown in journald output](../documentation/images/phase-2/failed_logs.png)
 
 Caption: Failed logs: multiple failed login attempts.
 
@@ -270,7 +270,7 @@ Result:
 Accepted password for socadmin from 192.168.11.129 port 60776 ssh2
 ```
 
-![SSH accepted login event confirming successful authentication](images/phase-2/successful_login.png)
+![SSH accepted login event confirming successful authentication](../documentation/images/phase-2/successful_login.png)
 
 Caption: Successful login: confirmed system compromise.
 
