@@ -66,10 +66,10 @@ The project follows a phased engineering approach:
 
 ## Current Status
 
-Phase 1 has been successfully completed.  
-All virtual machines are operational, network-validated, updated, and preserved through named snapshots.
+Phase 1 (infrastructure) and Phase 2 (SIEM setup and log collection) have been successfully completed.  
+The lab environment is operational, network-validated, and is now capable of local log ingestion and basic monitoring through manual log review.
 
-Future phases will introduce SIEM integration, log forwarding, detection rules, and adversary simulation workflows.
+Future phases will focus on detection, analysis, and attack simulation.
 
 ---
 
