@@ -150,6 +150,10 @@ Result:
 22/tcp open  ssh  OpenSSH 9.6p1 Ubuntu
 ```
 
+![Nmap scan showing open SSH service](images/phase-2/nmap_scan.png)
+
+Caption: Nmap: open SSH port discovery.
+
 Observation:
 
 - Only SSH (port 22) was open.
@@ -184,6 +188,10 @@ Initial result:
 
 - `0 valid password found`
 
+![Hydra output for SSH brute-force attempt](images/phase-2/hydra_attack.png)
+
+Caption: Hydra: brute-force attack attempt.
+
 ### 9.3 Log Generation and Detection (Failed Attempts)
 
 Sample failed log entry observed:
@@ -191,6 +199,10 @@ Sample failed log entry observed:
 ```text
 Failed password for socadmin from 192.168.11.129 port 40196 ssh2
 ```
+
+![SSH failed login attempts shown in journald output](images/phase-2/failed_logs.png)
+
+Caption: Failed logs: multiple failed login attempts.
 
 Count failed attempts:
 
@@ -257,6 +269,10 @@ Result:
 ```text
 Accepted password for socadmin from 192.168.11.129 port 60776 ssh2
 ```
+
+![SSH accepted login event confirming successful authentication](images/phase-2/successful_login.png)
+
+Caption: Successful login: confirmed system compromise.
 
 ## 10. Challenges & Troubleshooting
 
