@@ -39,13 +39,17 @@ Phase 1 focuses strictly on infrastructure deployment, network validation, and b
 | Phase | Description | Status |
 |-------|-------------|--------|
 | Phase 1 | Infrastructure Deployment & Baseline Configuration | Completed |
-| Phase 2 | Security Tooling & Log Aggregation | Planned |
+| Phase 2 | Security Tooling & Log Aggregation | Completed |
 | Phase 3 | Detection & Monitoring Integration | Planned |
 | Phase 4 | Attack Simulation & Incident Analysis | Planned |
 
 Detailed documentation for Phase 1 is available here:
 
-👉 `docs/phase-1.md`
+👉 [docs/phase-1.md](docs/phase-1.md)
+
+Detailed documentation for Phase 2 is available here:
+
+👉 [docs/phase-2.md](docs/phase-2.md)
 
 ---
 
@@ -75,7 +79,8 @@ Future phases will introduce SIEM integration, log forwarding, detection rules, 
 SOC-LAB-DOCUMENTATION/
 ├── README.md                        # Project overview, architecture summary, and phase tracker
 ├── docs/
-│   └── phase-1.md                   # Detailed documentation for Phase 1 infrastructure deployment
+│   ├── phase-1.md                   # Detailed documentation for Phase 1 infrastructure deployment
+│   └── phase-2.md                   # Detailed documentation for Phase 2 – SIEM setup and log collection
 └── diagrams/
     └── soc-architecture.png         # Visual diagram of the three-node SOC lab topology
 ```
