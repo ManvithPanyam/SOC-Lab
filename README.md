@@ -198,10 +198,14 @@ SOC-Lab/
 |   +-- phase-3.md
 |
 |-- screenshots/
-|   |-- dashboard.png
-|   |-- logs.png
-|   |-- alert.png
-|   +-- attack.png
+|   |-- dashboard.png              # Phase 3: Splunk monitoring dashboard
+|   |-- logs.png                   # Phase 3: SSH logs ingested into Splunk
+|   |-- alert.png                  # Phase 3: Triggered brute-force alert
+|   |-- attack.png                 # Phase 3: Kali Linux attack terminal
+|   |-- nmap_scan.png              # Phase 2: Nmap service discovery
+|   |-- hydra_attack.png           # Phase 2: Hydra brute-force output
+|   |-- failed_logs.png            # Phase 2: Failed SSH log entries
+|   +-- successful_login.png       # Phase 2: Confirmed SSH compromise
 |
 |-- diagrams/
 |   +-- architecture.png
