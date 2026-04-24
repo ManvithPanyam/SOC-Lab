@@ -1,10 +1,10 @@
-# Phase 2 – SIEM Setup and Log Collection
+# Phase 2 -- Attack Simulation and Log Generation
 
 ## 1. Phase Overview
 
 Phase 2 focuses on generating and analyzing SSH authentication logs in the lab environment. The phase includes reconnaissance and brute-force activity from an attacker machine (Kali Linux) against a target log source (Ubuntu Server). Logs are recorded locally on the Ubuntu Server using `journald` and reviewed manually with `journalctl`.
 
-Important scope note: a SIEM platform is **not installed in this phase**. Splunk is identified as the planned SIEM tool, but its installation is pending and intended for Phase 3.
+Scope note: SIEM deployment is not part of this phase. Splunk Enterprise is deployed and configured in Phase 3.
 
 ## 2. Objectives
 
@@ -16,17 +16,10 @@ Important scope note: a SIEM platform is **not installed in this phase**. Splunk
 
 ## 3. SIEM Selection Justification
 
-### Current Phase Status
+- SIEM tool: **Splunk Enterprise**
+- Installation phase: **Phase 3**
 
-- SIEM tool: **Not installed yet**
-- Planned SIEM tool: **Splunk**
-- Installation status: **Pending (to be implemented in Phase 3)**
-
-### Justification (Planned)
-
-Splunk is the planned SIEM tool for later phases. In Phase 2, the work is limited to local log generation and manual review.
-
-No additional selection criteria (such as licensing, ingestion method, or indexing design) is documented for this phase.
+Splunk was selected as the SIEM platform for this project. In Phase 2, the work is limited to local log generation and manual review using `journalctl`. SIEM-based log ingestion, detection, and alerting are documented in [Phase 3](../Phase3-Detection-Monitoring/phase-3.md).
 
 ## 4. Environment Details
 
@@ -150,7 +143,7 @@ Result:
 22/tcp open  ssh  OpenSSH 9.6p1 Ubuntu
 ```
 
-![Nmap scan showing open SSH service](../documentation/images/phase-2/nmap_scan.png)
+![Nmap scan showing open SSH service](../screenshots/dashboard.png)
 
 Caption: Nmap: open SSH port discovery.
 
@@ -188,7 +181,7 @@ Initial result:
 
 - `0 valid password found`
 
-![Hydra output for SSH brute-force attempt](../documentation/images/phase-2/hydra_attack.png)
+![Hydra output for SSH brute-force attempt](../screenshots/attack.png)
 
 Caption: Hydra: brute-force attack attempt.
 
@@ -200,7 +193,7 @@ Sample failed log entry observed:
 Failed password for socadmin from 192.168.11.129 port 40196 ssh2
 ```
 
-![SSH failed login attempts shown in journald output](../documentation/images/phase-2/failed_logs.png)
+![SSH failed login attempts shown in journald output](../screenshots/logs.png)
 
 Caption: Failed logs: multiple failed login attempts.
 
@@ -270,7 +263,7 @@ Result:
 Accepted password for socadmin from 192.168.11.129 port 60776 ssh2
 ```
 
-![SSH accepted login event confirming successful authentication](../documentation/images/phase-2/successful_login.png)
+![SSH accepted login event confirming successful authentication](../screenshots/alert.png)
 
 Caption: Successful login: confirmed system compromise.
 
@@ -297,4 +290,4 @@ Caption: Successful login: confirmed system compromise.
 
 ## 12. Conclusion
 
-Phase 2 produced and verified SSH authentication logs from an attack simulation. Reconnaissance identified SSH as the only exposed service, Hydra generated both failed and successful authentication attempts, and Ubuntu Server recorded the events locally via `journald`. Manual analysis using `journalctl` confirmed the number of failed attempts, the attacker IP address, and the successful authentication event. SIEM installation remains pending for Phase 3.
+Phase 2 produced and verified SSH authentication logs from an attack simulation. Reconnaissance identified SSH as the only exposed service, Hydra generated both failed and successful authentication attempts, and Ubuntu Server recorded the events locally via `journald`. Manual analysis using `journalctl` confirmed the number of failed attempts, the attacker IP address, and the successful authentication event. These logs serve as the foundation for the SIEM-based detection and monitoring implemented in Phase 3.
