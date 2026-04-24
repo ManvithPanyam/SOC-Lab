@@ -1,163 +1,153 @@
-# SOC Lab Project – End-to-End Threat Detection
+# 🛡️ SOC Lab Project – End-to-End Threat Detection
 
-A structured, multi-phase Security Operations Center (SOC) lab project designed to simulate real-world cyber attacks and SOC detection workflows in a controlled virtualized environment.
-
----
-
-## Overview
-
-This repository documents a SOC lab environment built using VMware Workstation. The objective is to establish a stable infrastructure baseline and then progressively implement logging, monitoring, and detection activities through structured phases.
-
-The lab consists of:
-
-- **Kali-SOC** – Attacker / Security Analyst Node  
-- **Windows-SOC** – Endpoint / Victim Machine  
-- **Ubuntu-SOC** – SOC Server (Future SIEM Node)
-
-Phase 1 focuses strictly on infrastructure deployment, network validation, and baseline snapshot management.
+A structured, multi-phase Security Operations Center (SOC) lab built to simulate real-world cyber attacks and SOC detection workflows in a fully controlled virtualized environment.
 
 ---
 
-## Architecture
+## 📁 Repository Structure
 
-Simple flow (Phase 2):
-
-Kali Linux (Attacker) → Ubuntu Server (Target) → Logs → Analysis
-
-### Architecture Summary
-
-- Hypervisor: VMware Workstation  
-- Network Model: NAT  
-- IP Assignment: DHCP  
-- Connectivity: Internet + Inter-VM validated  
-- Resource Allocation: 4GB RAM, 2 CPU cores, 40GB storage per VM  
-
-
-### Architecture Diagram
-
-![SOC Architecture](diagrams/soc-architecture.png)
-
----
-
-## Lab Setup
-
-| Item | Value |
-|---|---|
-| Virtualization | VMware Workstation |
-| Network | NAT |
-| Kali IP | 192.168.11.129 |
-| Ubuntu IP | 192.168.11.128 |
-
-## Phase Documentation
-
-- Phase 1: [docs/phase-1.md](docs/phase-1.md)
-- Phase 2: [docs/phase-2.md](docs/phase-2.md)
-
-## Phase 2 – SIEM Setup and Log Collection
-
-### Reconnaissance (Nmap)
-
-Nmap was used from Kali Linux to identify exposed services on the Ubuntu Server target.
-
-![Nmap scan showing open SSH service discovery](documentation/images/phase-2/nmap_scan.png)
-
-Caption: Nmap: open SSH port discovery.
-
-### Brute Force Attack (Hydra)
-
-Hydra was used to simulate SSH password guessing against the Ubuntu Server target account.
-
-![Hydra output for SSH brute-force attempt](documentation/images/phase-2/hydra_attack.png)
-
-Caption: Hydra: brute-force attack attempt.
-
-### Failed Login Detection
-
-Failed SSH authentication attempts were identified on Ubuntu Server using `journalctl` queries against the SSH service logs.
-
-![Journald output showing multiple failed SSH logins](documentation/images/phase-2/failed_logs.png)
-
-Caption: Failed logs: multiple failed login attempts.
-
-### Successful Compromise
-
-After setting a known password for the target account and re-running Hydra, a successful SSH login was confirmed in the Ubuntu SSH logs.
-
-![Journald output showing accepted SSH login](documentation/images/phase-2/successful_login.png)
-
-Caption: Successful login: confirmed system compromise.
-
-## SOC Analysis
-
-- Brute-force detection: multiple failed SSH authentication attempts were observed and counted.
-- Attacker IP identification: log review identified a single source IP (192.168.11.129) for the failed attempts.
-- Successful compromise detection: an `Accepted` SSH log entry confirmed successful authentication.
-
-## Key Learnings
-
-- Validated connectivity and attack paths between lab hosts.
-- Used reconnaissance to identify the exposed service and its version.
-- Generated authentication events and verified that logs were recorded on the target system.
-- Performed basic log triage to quantify failed attempts and identify the source of activity.
-
-## Future Work
-
-- SIEM integration
-- Alerts
-- Dashboards
-
-## Project Status
-
-| Phase | Status |
-|---|---|
-| Phase 1 | Completed |
-| Phase 2 | Completed |
-| Phase 3 | Upcoming |
+```text
+SOC-Lab/
+│
+├── Phase1-Infrastructure/          # VM setup, network config, baseline snapshots
+│   └── phase-1.md
+│
+├── Phase2-Attack-Simulation/       # Nmap recon, Hydra brute-force, SSH attacks
+│   └── phase-2.md
+│
+├── Phase3-Detection-Monitoring/    # SIEM integration, alerting, dashboards
+│   └── (in progress)
+│
+├── screenshots/
+│   ├── dashboard.png               # Nmap scan – open port discovery
+│   ├── logs.png                    # Failed SSH login log entries
+│   ├── alert.png                   # Successful compromise confirmation
+│   └── attack.png                  # Hydra brute-force attack output
+│
+├── docs/
+│   └── architecture.png            # SOC lab topology diagram
+│
+└── README.md
+```
 
 ---
 
-## Phase Structure
+## 🧠 Overview
+
+This repository documents a SOC lab environment built using **VMware Workstation**. The objective is to establish a stable infrastructure baseline and progressively implement logging, monitoring, and detection through structured phases.
+
+| Node | Role |
+|------|------|
+| **Kali Linux** (`192.168.11.129`) | Attacker / Security Analyst |
+| **Ubuntu Server** (`192.168.11.128`) | Target / Victim Machine |
+| **Windows 10** | Endpoint / Monitoring Node |
+
+---
+
+## 🏗️ Architecture
+
+![SOC Architecture Diagram](docs/architecture.png)
+
+| Parameter | Value |
+|-----------|-------|
+| Hypervisor | VMware Workstation |
+| Network Mode | NAT |
+| IP Assignment | DHCP |
+| Resources | 4 GB RAM · 2 vCPU · 40 GB disk per VM |
+
+---
+
+## 📌 Phase Progress
 
 | Phase | Description | Status |
 |-------|-------------|--------|
-| Phase 1 | Infrastructure Deployment & Baseline Configuration | Completed |
-| Phase 2 | Security Tooling & Log Aggregation | Completed |
-| Phase 3 | Detection & Monitoring Integration | Planned |
-| Phase 4 | Attack Simulation & Incident Analysis | Planned |
+| Phase 1 | Infrastructure Deployment & Baseline Configuration | ✅ Completed |
+| Phase 2 | Attack Simulation (Recon + Brute-Force) | ✅ Completed |
+| Phase 3 | Detection & Monitoring (SIEM / Splunk) | 🔄 In Progress |
 
 ---
 
-## Design Philosophy
+## 🔴 Phase 2 – Attack Simulation
 
-The project follows a phased engineering approach:
+### 1. Reconnaissance (Nmap)
 
-- Separate infrastructure from security configuration  
-- Establish validated baselines before introducing complexity  
-- Preserve rollback states using structured snapshots  
-- Maintain clean documentation for each implementation stage  
+Nmap was run from Kali Linux to identify exposed services on the Ubuntu Server target.
 
----
+![Nmap scan showing open SSH port](screenshots/dashboard.png)
 
-## Current Status
-
-Phase 1 (infrastructure) and Phase 2 (SIEM setup and log collection) have been successfully completed.  
-The lab environment is operational, network-validated, and is now capable of local log ingestion and basic monitoring through manual log review.
-
-Future phases will focus on detection, analysis, and attack simulation.
+*Nmap: open SSH port discovery on 192.168.11.128*
 
 ---
 
-## Repository Structure
+### 2. SSH Brute-Force (Hydra)
 
-```text
-SOC-LAB-DOCUMENTATION/
-├── README.md                        # Project overview, architecture summary, and phase tracker
-├── documentation/
-│   └── images/
-│       └── phase-2/                 # Phase 2 screenshots for README
-├── docs/
-│   ├── phase-1.md                   # Detailed documentation for Phase 1 infrastructure deployment
-│   └── phase-2.md                   # Detailed documentation for Phase 2 – SIEM setup and log collection
-└── diagrams/
-    └── soc-architecture.png         # Visual diagram of the three-node SOC lab topology
-```
+Hydra was used to simulate SSH password guessing against the Ubuntu Server target account.
+
+![Hydra brute-force output](screenshots/attack.png)
+
+*Hydra: dictionary-based SSH brute-force attack attempt*
+
+---
+
+### 3. Failed Login Detection
+
+Multiple failed SSH authentication attempts were confirmed on Ubuntu Server using `journalctl`.
+
+![Failed SSH login log entries](screenshots/logs.png)
+
+*journalctl: multiple failed authentication events from 192.168.11.129*
+
+---
+
+### 4. Successful Compromise
+
+After a correct credential was identified, a successful SSH login was confirmed in the Ubuntu SSH logs.
+
+![Successful SSH login confirmed](screenshots/alert.png)
+
+*journalctl: Accepted SSH login — confirmed system compromise*
+
+---
+
+## 🔍 SOC Analysis Findings
+
+- **Brute-force detected:** Multiple consecutive failed SSH authentication events from a single source IP.
+- **Attacker IP identified:** `192.168.11.129` (Kali Linux node) across all failed attempts.
+- **Compromise confirmed:** An `Accepted` SSH log entry verified successful unauthorized access.
+
+---
+
+## 📖 Phase Documentation
+
+- 📄 [Phase 1 – Infrastructure](Phase1-Infrastructure/phase-1.md)
+- 📄 [Phase 2 – Attack Simulation](Phase2-Attack-Simulation/phase-2.md)
+
+---
+
+## 🚀 Future Work (Phase 3)
+
+- Deploy **Splunk / ELK Stack** for centralized log aggregation
+- Build real-time **alert rules** for brute-force thresholds
+- Create **dashboards** for attacker IP tracking and event timelines
+- Integrate **Windows Event Logs** into SIEM pipeline
+
+---
+
+## 🧠 Key Learnings
+
+- Validated attack paths and connectivity between lab hosts
+- Used Nmap reconnaissance to identify exposed services and versions
+- Generated real authentication events and confirmed log capture on the target
+- Performed log triage to count failed attempts and identify attacker source IP
+- Confirmed end-to-end compromise from Kali → Ubuntu
+
+---
+
+## ⚙️ Design Philosophy
+
+The project follows a structured, phased engineering approach:
+
+- Separate infrastructure setup from security testing
+- Establish validated baselines before introducing attack complexity
+- Preserve rollback states using structured VM snapshots
+- Maintain clean, reproducible documentation at each stage
