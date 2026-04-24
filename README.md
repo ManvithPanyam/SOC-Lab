@@ -215,10 +215,43 @@ SOC-Lab/
 
 ---
 
-## Phase Status
+## Project Checklist
 
-| Phase | Description | Status |
-|-------|-------------|--------|
-| Phase 1 | Infrastructure Deployment and Baseline Configuration | Completed |
-| Phase 2 | Attack Simulation (Reconnaissance and Brute-Force) | Completed |
-| Phase 3 | Detection and Monitoring (Splunk SIEM) | Completed |
+### Phase 1 -- Infrastructure Deployment
+
+| Task | Status |
+|------|--------|
+| Deploy Kali Linux VM (Attacker) | Completed |
+| Deploy Ubuntu Server VM (Target / SIEM Host) | Completed |
+| Deploy Windows 10 VM (Endpoint) | Completed |
+| Configure NAT networking (VMnet8) | Completed |
+| Validate inter-VM connectivity (ICMP ping) | Completed |
+| Validate internet connectivity on all nodes | Completed |
+| Enable OpenSSH Server on Ubuntu | Completed |
+| Apply baseline system updates | Completed |
+| Create clean-state snapshots for all VMs | Completed |
+
+### Phase 2 -- Attack Simulation
+
+| Task | Status |
+|------|--------|
+| Perform Nmap reconnaissance against Ubuntu Server | Completed |
+| Identify exposed SSH service (port 22) | Completed |
+| Execute Hydra brute-force attack against target account | Completed |
+| Generate failed SSH authentication log events | Completed |
+| Confirm successful SSH compromise in logs | Completed |
+| Perform manual log analysis using journalctl | Completed |
+| Quantify failed attempts and identify attacker IP | Completed |
+
+### Phase 3 -- Detection and Monitoring
+
+| Task | Status |
+|------|--------|
+| Install Splunk Enterprise on Ubuntu Server | Completed |
+| Configure log ingestion from /var/log/auth.log | Completed |
+| Verify SSH events are searchable in Splunk | Completed |
+| Engineer SPL detection query for brute-force activity | Completed |
+| Configure scheduled alert with threshold trigger | Completed |
+| Re-execute attack simulation to validate detection | Completed |
+| Confirm alert triggered on brute-force activity | Completed |
+| Build four-panel SSH monitoring dashboard | Completed |
