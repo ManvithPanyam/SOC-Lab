@@ -81,7 +81,7 @@ Phase 2 introduces offensive security activity into the lab. Nmap was used from 
 
 ### Phase 3 -- Detection and Monitoring
 
-Phase 3 deploys Splunk Enterprise on the Ubuntu Server to centralize log collection and automate threat detection. SSH authentication logs from `/var/log/auth.log` are ingested into Splunk and made searchable. A detection rule identifies brute-force activity by counting failed SSH login attempts per source IP. An alert is configured to trigger when the threshold is exceeded. A four-panel dashboard provides real-time visibility into authentication events.
+Phase 3 deploys Splunk Enterprise on the Ubuntu Server to centralize log collection and automate threat detection. SSH authentication logs from `/var/log/auth.log` are ingested into Splunk and made searchable. A detection rule identifies brute-force activity by counting failed SSH login attempts per source IP. An alert is configured to trigger when the threshold is exceeded. A three-panel monitoring dashboard provides real-time visibility into authentication events.
 
 **Documentation:** [Phase3-Detection-Monitoring/phase-3.md](Phase3-Detection-Monitoring/phase-3.md)
 
@@ -113,14 +113,13 @@ index=main sourcetype=linux_secure "Failed password"
 
 ## Dashboard
 
-The Splunk dashboard ("SOC Lab - SSH Authentication Monitor") provides four panels for monitoring SSH activity:
+The Splunk dashboard ("SOC Monitoring Dashboard") provides three panels for monitoring SSH activity:
 
 | Panel | Description | Visualization |
 |-------|-------------|---------------|
-| Total Failed SSH Logins | Aggregate count of all failed authentication attempts | Single value |
-| Failed Logins by Source IP | Breakdown of failed attempts per source IP | Table |
-| Successful Logins | Timeline of accepted SSH connections with username and source IP | Table |
-| Authentication Events Over Time | Volume of failed and successful events over time | Line chart |
+| Failed Login Attempts | Volume of failed SSH authentication attempts over time | Line chart |
+| Top Attacking IPs | Source IP addresses ranked by number of failed attempts | Bar chart |
+| Attack Timeline | Overall authentication event volume over time | Line chart |
 
 ---
 
@@ -140,7 +139,7 @@ The Splunk dashboard ("SOC Lab - SSH Authentication Monitor") provides four pane
 
 ### Attack Simulation Output
 
-![Hydra SSH brute-force attack output from Kali Linux](screenshots/attack.png)
+![Manual SSH login attempts from Kali Linux](screenshots/attack.png)
 
 ---
 
@@ -155,7 +154,7 @@ The Splunk dashboard ("SOC Lab - SSH Authentication Monitor") provides four pane
 | Successful Compromise | 1 (after known credential was configured) |
 | Detection Rule | Functional (correctly identified attacker IP) |
 | Alert Status | Triggered successfully on brute-force activity |
-| Dashboard | Operational with four panels |
+| Dashboard | Operational with three panels |
 
 The detection pipeline correctly identified `192.168.11.129` as the source of brute-force activity and triggered an alert without producing false positives during testing.
 
@@ -254,4 +253,4 @@ SOC-Lab/
 | Configure scheduled alert with threshold trigger | Completed |
 | Re-execute attack simulation to validate detection | Completed |
 | Confirm alert triggered on brute-force activity | Completed |
-| Build four-panel SSH monitoring dashboard | Completed |
+| Build three-panel SSH monitoring dashboard | Completed |

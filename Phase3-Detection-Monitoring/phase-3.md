@@ -94,7 +94,9 @@ After configuring the data input, log ingestion was verified by running a basic 
 index=main sourcetype=linux_secure
 ```
 
-This confirmed that SSH authentication events — including both `Failed password` and `Accepted password` entries — were being indexed and were searchable through the Splunk interface.
+This confirmed that SSH authentication events — including both `Failed password` and `Invalid user` entries — were being indexed and were searchable through the Splunk interface.
+
+![SSH authentication events ingested into Splunk search](../screenshots/logs.png)
 
 ---
 
@@ -144,7 +146,7 @@ A saved search was created in Splunk with the following parameters:
 
 | Parameter | Value |
 |---|---|
-| Alert Name | SSH Brute-Force Detection |
+| Alert Name | SSH Brute Force Detection |
 | Search Query | See SPL query in Section 4.3 |
 | Time Range | Last 10 minutes |
 | Schedule | Every 5 minutes |
@@ -162,13 +164,9 @@ A saved search was created in Splunk with the following parameters:
 
 ### 5.3 Alert Validation
 
-To validate the alert, the Phase 2 attack simulation was repeated from the Kali Linux machine:
+To validate the alert, the Phase 2 attack simulation was repeated from the Kali Linux machine. After the attack completed and the alert schedule interval elapsed, the triggered alert appeared in **Activity > Triggered Alerts** within the Splunk Web interface. The alert correctly identified `192.168.11.129` as the source IP exceeding the brute-force threshold.
 
-```bash
-hydra -l socadmin -P passwords.txt ssh://192.168.11.128
-```
-
-After the Hydra scan completed and the alert schedule interval elapsed, the triggered alert appeared in **Activity > Triggered Alerts** within the Splunk Web interface. The alert correctly identified `192.168.11.129` as the source IP exceeding the brute-force threshold.
+![Splunk triggered alerts showing SSH Brute Force Detection events](../screenshots/alert.png)
 
 ---
 
@@ -207,6 +205,8 @@ ssh fakeuser@192.168.11.128
 
 Each manual attempt resulted in password prompts followed by `Permission denied, please try again.` messages, ultimately ending with `Permission denied (publickey,password).` after the maximum number of attempts per connection.
 
+![Manual SSH login attempts from Kali Linux showing permission denied responses](../screenshots/attack.png)
+
 ### 6.3 Log Confirmation
 
 After the attack simulation, the following Splunk query confirmed that the events were ingested:
@@ -220,64 +220,54 @@ The query returned a count consistent with the number of Hydra attempts plus the
 
 ---
 
-## 7. Dashboard Visualization
+## 7. Dashboard
 
 ### 7.1 Dashboard Overview
 
-A Splunk dashboard was created to provide a centralized view of SSH authentication activity across the lab environment. The dashboard consolidates key metrics into a single interface, enabling rapid identification of anomalous authentication patterns.
+A Splunk dashboard titled "SOC Monitoring Dashboard" was created to provide a centralized view of SSH authentication activity across the lab environment. The dashboard consolidates key metrics into a single interface, enabling rapid identification of anomalous authentication patterns.
 
 ### 7.2 Dashboard Panels
 
-The dashboard consists of four panels:
+The dashboard consists of three panels:
 
-**Panel 1: Total Failed SSH Logins**
+**Panel 1: Failed Login Attempts**
 
-Displays the total count of failed SSH authentication attempts across all source IPs.
+Displays the volume of failed SSH authentication attempts over time as a line chart, enabling visual identification of attack windows and spikes in brute-force activity.
 
 ```spl
 index=main sourcetype=linux_secure "Failed password"
-| stats count as total_failed
+| timechart count
 ```
 
-**Panel 2: Failed Logins by Source IP**
+**Panel 2: Top Attacking IPs**
 
-Displays a table showing the number of failed login attempts grouped by source IP address, sorted in descending order.
+Displays a bar chart of source IP addresses ranked by the number of failed authentication attempts, identifying the most active attackers.
 
 ```spl
 index=main sourcetype=linux_secure "Failed password"
 | rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
-| stats count as failed_attempts by src_ip
-| sort -failed_attempts
+| stats count by src_ip
+| sort -count
 ```
 
-**Panel 3: Successful Logins**
+**Panel 3: Attack Timeline**
 
-Displays a table of all successful SSH authentication events, including the username, source IP, and timestamp.
-
-```spl
-index=main sourcetype=linux_secure "Accepted password"
-| rex "for (?<username>\w+) from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
-| table _time, username, src_ip
-| sort -_time
-```
-
-**Panel 4: Authentication Events Over Time**
-
-Displays a time chart showing the volume of both failed and successful authentication events over time, enabling visual identification of attack windows.
+Displays a line chart showing the overall volume of authentication-related events over time, providing a timeline view of attack activity across the monitoring window.
 
 ```spl
-index=main sourcetype=linux_secure ("Failed password" OR "Accepted password")
-| eval event_type=if(like(_raw, "%Failed password%"), "Failed", "Accepted")
-| timechart count by event_type
+index=main sourcetype=linux_secure ("Failed password" OR "Invalid user")
+| timechart count
 ```
 
 ### 7.3 Dashboard Creation Steps
 
 1. Navigate to **Dashboards > Create New Dashboard**.
-2. Set the dashboard title to "SOC Lab - SSH Authentication Monitor".
+2. Set the dashboard title to "SOC Monitoring Dashboard".
 3. Add each panel using the SPL queries documented above.
-4. Select appropriate visualization types (single value for Panel 1, table for Panels 2 and 3, line chart for Panel 4).
+4. Select appropriate visualization types (line chart for Panels 1 and 3, bar chart for Panel 2).
 5. Save the dashboard.
+
+![SOC Monitoring Dashboard showing failed login attempts, top attacking IPs, and attack timeline](../screenshots/dashboard.png)
 
 ---
 
@@ -293,7 +283,7 @@ The Phase 3 implementation produced the following results:
 
 3. **Alert triggered successfully.** The saved search alert fired after the Hydra brute-force scan was re-executed, confirming that the alerting pipeline functions correctly under the defined schedule and threshold.
 
-4. **Dashboard operational.** All four dashboard panels rendered correctly and displayed data consistent with the attack simulation. The time chart panel clearly showed the spike in failed authentication events during the Hydra scan window.
+4. **Dashboard operational.** All three dashboard panels rendered correctly and displayed data consistent with the attack simulation. The timeline panels clearly showed the spike in failed authentication events during the Hydra scan window.
 
 ### 8.2 Attacker Profile (Based on Splunk Analysis)
 
